@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1c05b6b296f94f41b1dea57f5e37428, type: 3}
+  m_Name: LevelContainer
+  m_EditorClassIdentifier: 
+  LoopMode: 0
+  MainScene:
+    sceneAsset: {fileID: 102900000, guid: f92b828d1ba1f5e408c232c51ee54cf7, type: 3}
+    scenePath: Assets/Scenes/TestScenes/MainMenu.unity
+  Levels:
+  - sceneAsset: {fileID: 102900000, guid: 39ff953248b907545ab866bf99afe727, type: 3}
+    scenePath: Assets/Scenes/TestScenes/Level1.unity
+  - sceneAsset: {fileID: 102900000, guid: 231cef079c2fcea4eaab1faef16488ec, type: 3}
+    scenePath: Assets/Scenes/TestScenes/Level2.unity
+  - sceneAsset: {fileID: 102900000, guid: faa61af607778cb4c8314c7cab7b3d5c, type: 3}
+    scenePath: Assets/Scenes/TestScenes/Level3.unity
+  - sceneAsset: {fileID: 102900000, guid: c5f852b552e03e54ba52232eeb21d66f, type: 3}
+    scenePath: Assets/Scenes/TestScenes/Level4.unity
+  IsMainMenuEnabled: 0
