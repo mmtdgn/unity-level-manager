@@ -89,7 +89,6 @@ public class GlobalDefinitions
     }
 #endif
 
-
     private static void AddForAllPlatforms(string define)
     {
         SetScriptingDefineSymbolsForGroup(BuildTargetGroup.Standalone, define);
