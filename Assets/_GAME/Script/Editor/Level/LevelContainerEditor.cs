@@ -24,7 +24,7 @@ public class LevelContainerEditor : Editor
     }
 
     private void DrawListHeader(Rect rect) => GUI.Label(rect, "Levels");
-    
+
     private void DrawListElement(Rect rect, int index, bool isActive, bool isFocused)
     {
         var item = m_LevelListProperty.GetArrayElementAtIndex(index);
@@ -44,6 +44,9 @@ public class LevelContainerEditor : Editor
             DrawProperties();
             DrawLine();
             DrawReorderableList();
+#if SCENE_MODE
+            DrawBuildSettingsButton();
+#endif
         }
         EditorGUI.EndDisabledGroup();
 
@@ -89,4 +92,15 @@ public class LevelContainerEditor : Editor
         EditorGUILayout.Space();
         m_List.DoLayoutList();
     }
+
+#if SCENE_MODE
+    private void DrawBuildSettingsButton()
+    {
+        if (GUILayout.Button("Set Build Settings", GUILayout.Height(30)))
+            m_Base.BuildSettingsSetter();
+
+        if (EditorBuildSettings.scenes.Length == 0)
+            EditorGUILayout.HelpBox("Build Settings is empty...\n Please Set build settings!", MessageType.Error);
+    }
+#endif
 }

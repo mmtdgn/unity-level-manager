@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1c05b6b296f94f41b1dea57f5e37428, type: 3}
   m_Name: LevelContainer
   m_EditorClassIdentifier: 
-  LoopMode: 0
+  LoopMode: 1
   MainScene:
     sceneAsset: {fileID: 102900000, guid: f92b828d1ba1f5e408c232c51ee54cf7, type: 3}
     scenePath: Assets/Scenes/TestScenes/MainMenu.unity

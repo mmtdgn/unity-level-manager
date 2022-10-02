@@ -11,8 +11,12 @@ public class LevelContainer : ScriptableObject
     public SceneReference MainScene;
     public List<SceneReference> Levels;
     public bool IsMainMenuEnabled;
+
+    public void BuildSettingsSetter()
+    {
+        LevelManager.ExternalBuildSettings();
+    }
 #else
     public List<LevelDataBase> Levels;
 #endif
-    // TODO: Is level data empty or none throw error box
 }

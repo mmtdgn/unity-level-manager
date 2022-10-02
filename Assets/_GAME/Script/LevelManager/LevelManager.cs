@@ -37,7 +37,7 @@ public class LevelManager : Singleton<LevelManager>
     private const string KEY_CURRENT_LEVEL_INDEX = "CurrentLevelIndex";
     private const string IS_LAST_LEVEL_COMPLETED = "IsLastLevelCompleted";
     private const string KEY_IS_SAVE_DATA_EXIST = "IsSaveDataExist";
-    
+
 #if SCENE_MODE
     protected LoadingScreenController GetLoadingScreen
     {
@@ -60,19 +60,22 @@ public class LevelManager : Singleton<LevelManager>
     private void Awake() => base.Init();
 
 #if UNITY_EDITOR && SCENE_MODE
-    private void BuildSettings()//AutoUpdate for scene list in build settings
+
+    public static void ExternalBuildSettings()
     {
         List<EditorBuildSettingsScene> editorBuildSettingsScenes = new List<EditorBuildSettingsScene>();
 
         //Add MainMenu
-        string scenePath = m_LevelContainer.MainScene.ScenePath;
+        string scenePath = Instance?.m_LevelContainer.MainScene.ScenePath;
         if (!string.IsNullOrEmpty(scenePath))
             editorBuildSettingsScenes.Add(new EditorBuildSettingsScene(scenePath, true));
+        else
+            return;
 
         //Add Levels
-        for (int i = 0; i < m_LevelContainer.Levels.Count; i++)
+        for (int i = 0; i < Instance?.m_LevelContainer.Levels.Count; i++)
         {
-            scenePath = m_LevelContainer.Levels[i].ScenePath;
+            scenePath = Instance.m_LevelContainer.Levels[i].ScenePath;
             if (!string.IsNullOrEmpty(scenePath))
                 editorBuildSettingsScenes.Add(new EditorBuildSettingsScene(scenePath, true));
         }
@@ -122,11 +125,11 @@ public class LevelManager : Singleton<LevelManager>
         }
         else if (_loopMode == LoopMode.EndlessRandom)
         {
-            if (!IsLastLevelCompleted() && m_CurrentLevelIndex == GetLastLevelIndex())
+            if (!IsLevelsCompleted() && m_CurrentLevelIndex == GetLastLevelIndex())
             {
                 OnLastLevelComplete();
             }
-            else if (IsLastLevelCompleted())
+            else if (IsLevelsCompleted())
             {
                 m_CurrentLevelIndex = UnityEngine.Random.Range(0, GetLevelCount());
                 Debug.Log(m_CurrentLevelIndex);
@@ -150,8 +153,8 @@ public class LevelManager : Singleton<LevelManager>
         PlayerPrefs.SetInt(IS_LAST_LEVEL_COMPLETED, 1);
         PlayerPrefs.Save();
     }
-    
-    public static bool IsLastLevelCompleted() => PlayerPrefs.GetInt(IS_LAST_LEVEL_COMPLETED, -1) == 1;
+
+    public static bool IsLevelsCompleted() => PlayerPrefs.GetInt(IS_LAST_LEVEL_COMPLETED, -1) == 1;
 
 #if SCENE_MODE
     public static void LoadMainMenu()
@@ -162,6 +165,32 @@ public class LevelManager : Singleton<LevelManager>
 
     public static void RestartLevel()
     {
+#if SCENE_MODE
+        LoadScene(Instance.m_LevelContainer.Levels[m_CurrentLevelIndex]);
+#else
+        LoadPrefabLevel(m_CurrentLevelIndex);
+#endif
+    }
+
+    public static void StartPreviousLevel()
+    {
+        m_CurrentLevelIndex = GetLastLevelIndex();
+        if (m_CurrentLevelIndex > 0)
+            m_CurrentLevelIndex--;
+
+        SaveCurrentLevelIndex();
+#if SCENE_MODE
+        LoadScene(Instance.m_LevelContainer.Levels[m_CurrentLevelIndex]);
+#else
+        LoadPrefabLevel(m_CurrentLevelIndex);
+#endif
+    }
+
+    public static void StartRandomLevel()
+    {
+        m_CurrentLevelIndex = GetLastLevelIndex();
+        m_CurrentLevelIndex = UnityEngine.Random.Range(0, GetLevelCount());
+        SaveCurrentLevelIndex();
 #if SCENE_MODE
         LoadScene(Instance.m_LevelContainer.Levels[m_CurrentLevelIndex]);
 #else
@@ -256,7 +285,7 @@ public class LevelManager : Singleton<LevelManager>
         Instance.m_LoadingScreenController.OnLoadingComplete();
     }
     #endregion
-    
+
 #else
     private static void LoadPrefabLevel(int levelIndex)
     {
@@ -270,10 +299,30 @@ public class LevelManager : Singleton<LevelManager>
     }
 #endif
 
-#if SCENE_MODE
+#if SCENE_MODE && UNITY_EDITOR
+    private void Buildsettings()//AutoUpdate for scene list in build settings
+    {
+        List<EditorBuildSettingsScene> editorBuildSettingsScenes = new List<EditorBuildSettingsScene>();
+
+        //Add MainMenu
+        string scenePath = m_LevelContainer.MainScene.ScenePath;
+        if (!string.IsNullOrEmpty(scenePath))
+            editorBuildSettingsScenes.Add(new EditorBuildSettingsScene(scenePath, true));
+        else
+            return;
+
+        for (int i = 0; i < m_LevelContainer.Levels.Count; i++)
+        {
+            scenePath = m_LevelContainer.Levels[i].ScenePath;
+            if (!string.IsNullOrEmpty(scenePath))
+                editorBuildSettingsScenes.Add(new EditorBuildSettingsScene(scenePath, true));
+        }
+        EditorBuildSettings.scenes = editorBuildSettingsScenes.ToArray();
+    }
     private void OnValidate()
     {
-        BuildSettings();
+        if (!EditorApplication.isPlaying)
+            Buildsettings();
     }
 #endif
 }
