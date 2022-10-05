@@ -22,8 +22,8 @@ A manager system to control levels and states with ease. Supports Scene based an
 | MainScene | Main Scene reference (Scene Mode only) |
 
 ### Level Mode
- * `Prefab mode` : spawn level prefabs works same scene:  
- * `Scene mode` : Level system loads scenes. Need Init scene. Automatically adds scenes to buildsettings secene list.
+ * `Prefab mode` : The level system spawns levels prefab. It works in the same scene.  
+ * `Scene mode` : The Level system loads scenes. Need Init scene. Automatically adds scenes to buildsettings.  
  
  ### Loop Mode
   * `EndlessRandom` : After completing entire levels, Level Manager loads random level.
@@ -63,9 +63,10 @@ A manager system to control levels and states with ease. Supports Scene based an
 
 | Methods | Description|
 |----|---|
-| StartLevel(Leveldata,levelIndex) | Call for load the level. Invokes Start event |
-| OnLevelCompleted(int score) | Call on level completed. Invokes complete event with given score |
-| OnLevelFail(levelIndex) | Call on level failed. Invokes level failed event |
+| StartLevel(Leveldata,levelIndex) | Called after level loading complete |
+| OnLevelCompleted(int score) | Called when level completed |
+| OnLevelFail(levelIndex) | Calleded when level failed |
+| OnReturnMenu | called when exit the game and returning to the main menu. |
 
 ## LevelData
 Level data contains information about levels, such as display level index, difficulty, win or lose conditions. You can set the data while loading the level or use the preset data. It can vary from game to game. So it's up to you. Declare the data and set it as you want.
